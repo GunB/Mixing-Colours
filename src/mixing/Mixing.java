@@ -28,7 +28,6 @@ public class Mixing {
     int contCases = -1;
     int contRulesCase = 0;
     ArrayList<Rule> lstRules = new ArrayList<>();
-
     ArrayList<Case> lstCases = new ArrayList<>();
 
     /**
@@ -45,26 +44,7 @@ public class Mixing {
     }
 
     public void Play() {
-
         TestCase(lstCases.get(1));
-    }
-
-    private Case CleanCase(Case datCase) {
-        for (int i = 0; i < datCase.lstColors.size() - 1; i++) {
-            LineColor lnColors1 = datCase.lstColors.get(i);
-            LineColor lnColors2 = datCase.lstColors.get(i + 1);
-
-            for (Color color1 : lnColors1.lstColor) {
-                for (Color color2 : lnColors2.lstColor) {
-                    if (Mixable(color1, color2) != null) {
-                        color1.bulFlagCombine = true;
-                        color2.bulFlagCombine = true;
-                    }
-                }
-            }
-        }
-        datCase.CleanCase();
-        return datCase;
     }
 
     private ArrayList<Case> TestCase(Case datCase) {
@@ -123,6 +103,24 @@ public class Mixing {
 
         //System.out.println(datCase.PrintCase());
         return lstNewCases;
+    }
+    
+    private Case CleanCase(Case datCase) {
+        for (int i = 0; i < datCase.lstColors.size() - 1; i++) {
+            LineColor lnColors1 = datCase.lstColors.get(i);
+            LineColor lnColors2 = datCase.lstColors.get(i + 1);
+
+            for (Color color1 : lnColors1.lstColor) {
+                for (Color color2 : lnColors2.lstColor) {
+                    if (Mixable(color1, color2) != null) {
+                        color1.bulFlagCombine = true;
+                        color2.bulFlagCombine = true;
+                    }
+                }
+            }
+        }
+        datCase.CleanCase();
+        return datCase;
     }
 
     private Color Mixable(Color color1, Color color2) {
