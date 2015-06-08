@@ -38,23 +38,107 @@ public class Mixing {
         try {
             Mixing mix = new Mixing().Run();
             mix.Play();
-            
-            
+
         } catch (IOException ex) {
             Logger.getLogger(Mixing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void Play(){
-        
+
+    public void Play() {
+
+        Case TestCase = TestCase(lstCases.get(1));
+
+        for (Case datCase : TestCase.lstCases) {
+            datCase.PrintCase();
+        }
     }
-    
-    public ArrayList TestCase(Case datCase){
-        ArrayList<LineColor> lnColors = new ArrayList<>();
-        
-        
-        
-        return lnColors;
+
+    private Case CleanCase(Case datCase) {
+        for (int i = 0; i < datCase.lstColors.size() - 1; i++) {
+            LineColor lnColors1 = datCase.lstColors.get(i);
+            LineColor lnColors2 = datCase.lstColors.get(i + 1);
+
+            for (Color color1 : lnColors1.lstColor) {
+                for (Color color2 : lnColors2.lstColor) {
+                    if (Mixable(color1, color2) != null) {
+                        color1.bulFlagCombine = true;
+                        color2.bulFlagCombine = true;
+                    }
+                }
+            }
+        }
+        datCase.CleanCase();
+        return datCase;
+    }
+
+    private ArrayList<Case> TestCase(Case datCase) {
+        ArrayList<Case> lstNewCases = new ArrayList<>();
+
+        datCase = CleanCase(datCase);
+        int counThings = datCase.counThings();
+
+        if (counThings == 1) {
+            datCase.lstCases = null;
+            lstNewCases.add(datCase);
+            return lstNewCases;
+        } else if (counThings == 0) {
+            return null;
+        }
+
+        //<editor-fold defaultstate="collapsed" desc="Creating cases">
+        for (int i = 0; i < datCase.lstColors.size() - 1; i++) {
+            LineColor lnColors1 = datCase.lstColors.get(i);
+            LineColor lnColors2 = datCase.lstColors.get(i + 1);
+            
+            for (Color color1 : lnColors1.lstColor) {
+                for (Color color2 : lnColors2.lstColor) {
+                    
+                    Color newColor = Mixable(color1, color2);
+                    
+                    if (newColor != null) {
+                        Object objCase = (Object) datCase;
+                        
+                        Case tempCase = new Case(datCase);//datCase;
+                        //SerializationUtils.clone(datCase);
+                        
+                        tempCase.lstColors.remove(i);
+                        tempCase.lstColors.remove(i);
+                        tempCase.lstColors.add(i, new LineColor(newColor));
+                        
+                        lstNewCases.add(tempCase);
+                        
+                        //datCase.lstCases.add(tempCase);
+                        
+                        //System.out.println(tempCase.PrintCase());
+                    }
+                    
+                }
+            }
+        }
+//</editor-fold>
+
+        if (datCase.lstCases.isEmpty()) {
+            return null;
+        } else {
+            boolean haveCases = false;
+            
+            
+        }
+
+        //System.out.println(datCase.PrintCase());
+        return lstNewCases;
+    }
+
+    private Color Mixable(Color color1, Color color2) {
+        boolean isMixable;
+        for (Rule rule : lstRules) {
+            isMixable = rule.isMixable(color1, color2);
+            if (isMixable) {
+                return rule.Mix(color1, color2);
+            }
+        }
+
+        return null;
     }
 
     private Mixing Run() throws IOException {
@@ -71,7 +155,7 @@ public class Mixing {
 
             if (isRuled && contRules > 0) {
                 String[] split = line.split("\\s+");
-                lstRules.add(new Rule(split[0], split[1], split[2]));
+                lstRules.add(new Rule(new Color(split[0]), new Color(split[1]), new Color(split[2])));
                 contRules--;
                 continue;
             }
@@ -91,19 +175,19 @@ public class Mixing {
                 String[] split = line.split("\\s+");
                 ArrayList<Color> lstColors = new ArrayList<>();
                 for (int i = 0; i < split.length; i = i + 2) {
-                    Color color = new Color(split[i], Float.parseFloat(split[i+1]));
+                    Color color = new Color(split[i], Float.parseFloat(split[i + 1]));
                     lstColors.add(color);
-                    if(split[i+2].contains("END")){
+                    if (split[i + 2].contains("END")) {
                         break;
                     }
                 }
                 LineColor lnColor = new LineColor(lstColors);
                 tempCase.lstColors.add(lnColor);
-                
+
                 contRulesCase--;
-                if(contRulesCase == 0){
+                if (contRulesCase == 0) {
                     lstCases.add(tempCase);
-                    System.out.println(tempCase.PrintCase());
+                    //System.out.println(tempCase.PrintCase());
                 }
             }
         }

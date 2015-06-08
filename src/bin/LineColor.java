@@ -6,6 +6,7 @@
 package bin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -18,5 +19,14 @@ public class LineColor {
         this.lstColor = lstColor;
     }
     
+    public LineColor(Color[] colors){
+        this.lstColor = new ArrayList<>(Arrays.asList(colors));
+    }
+    
+    public LineColor(Color color){
+        Color[] colors = new Color[1];
+        colors[0] = color;
+        this.lstColor = new ArrayList<>(Arrays.asList(colors));
+    }
     
 }

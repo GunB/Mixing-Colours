@@ -13,10 +13,15 @@ public class Color {
 
     public String strColor;
     public float ftProbabilidad;
+    public boolean bulFlagCombine;
 
     public Color(String strColor, float ftProbabilidad) {
         this.strColor = strColor;
         this.ftProbabilidad = ftProbabilidad;
+    }
+
+    public Color(String strColor) {
+        this.strColor = strColor;
     }
 
 }
