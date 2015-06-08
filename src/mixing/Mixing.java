@@ -46,11 +46,7 @@ public class Mixing {
 
     public void Play() {
 
-        Case TestCase = TestCase(lstCases.get(1));
-
-        for (Case datCase : TestCase.lstCases) {
-            datCase.PrintCase();
-        }
+        TestCase(lstCases.get(1));
     }
 
     private Case CleanCase(Case datCase) {
