@@ -64,6 +64,17 @@ public class Case {
         }
     }
     
+    public boolean emptyLine(){
+        
+        for (LineColor line : lstColors) {
+            if(line.lstColor.isEmpty()){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     public int counThings(){
         int contColors = 0;
         for (LineColor line : lstColors) {

@@ -44,7 +44,11 @@ public class Mixing {
     }
 
     public void Play() {
-        TestCase(lstCases.get(1));
+        ArrayList<Case> TestCase = TestCase(lstCases.get(1));
+
+        for (Case tempCase : TestCase) {
+            System.out.println(tempCase.PrintCase());
+        }
     }
 
     private ArrayList<Case> TestCase(Case datCase) {
@@ -52,6 +56,12 @@ public class Mixing {
 
         datCase = CleanCase(datCase);
         int counThings = datCase.counThings();
+        
+        boolean emptyLine = datCase.emptyLine();
+        
+        if(emptyLine){
+            return null;
+        }
 
         if (counThings == 1) {
             datCase.lstCases = null;
@@ -61,51 +71,60 @@ public class Mixing {
             return null;
         }
 
-        //<editor-fold defaultstate="collapsed" desc="Creating cases">
+        //<editor-fold defaultstate="collapsed" desc="Creating cases lstNewCases.add(tempCase)">
         for (int i = 0; i < datCase.lstColors.size() - 1; i++) {
             LineColor lnColors1 = datCase.lstColors.get(i);
             LineColor lnColors2 = datCase.lstColors.get(i + 1);
-            
+
             for (Color color1 : lnColors1.lstColor) {
                 for (Color color2 : lnColors2.lstColor) {
-                    
+
                     Color newColor = Mixable(color1, color2);
-                    
+
                     if (newColor != null) {
                         Object objCase = (Object) datCase;
-                        
+
                         Case tempCase = new Case(datCase);//datCase;
                         //SerializationUtils.clone(datCase);
-                        
+
                         tempCase.lstColors.remove(i);
                         tempCase.lstColors.remove(i);
                         tempCase.lstColors.add(i, new LineColor(newColor));
-                        
+
                         lstNewCases.add(tempCase);
-                        
+
                         //datCase.lstCases.add(tempCase);
-                        
                         //System.out.println(tempCase.PrintCase());
                     }
-                    
+
                 }
             }
         }
-//</editor-fold>
+        //</editor-fold>
 
-        if (datCase.lstCases.isEmpty()) {
+        if (lstNewCases.isEmpty()) {
             return null;
         } else {
-            boolean haveCases = false;
-            
-            
+            ArrayList<Case> lstTempCases = new ArrayList<>();
+            for (Case tempCase : lstNewCases) {
+                ArrayList<Case> TestCase = TestCase(tempCase);
+                if (TestCase != null && !TestCase.isEmpty()) {
+                    lstTempCases.addAll(TestCase);
+                }
+            }
+            return lstTempCases;
+        }
+    }
+
+    private Case CleanCase(Case datCase) {
+        int counThings = datCase.counThings();
+
+        if (counThings == 1) {
+            return datCase;
+        } else if (counThings == 0) {
+            return null;
         }
 
-        //System.out.println(datCase.PrintCase());
-        return lstNewCases;
-    }
-    
-    private Case CleanCase(Case datCase) {
         for (int i = 0; i < datCase.lstColors.size() - 1; i++) {
             LineColor lnColors1 = datCase.lstColors.get(i);
             LineColor lnColors2 = datCase.lstColors.get(i + 1);
