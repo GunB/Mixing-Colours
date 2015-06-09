@@ -44,14 +44,14 @@ public class Mixing {
     }
 
     public void Play() {
-        ArrayList<Case> TestCase = TestCase(lstCases.get(1), 0);
+        ArrayList<Case> TestCase = TestCase(lstCases.get(1), 0, -1);
 
         for (Case tempCase : TestCase) {
             System.out.println(tempCase.PrintCase());
         }
     }
 
-    private ArrayList<Case> TestCase(Case datCase, int intLevel) {
+    private ArrayList<Case> TestCase(Case datCase, int intLevel, int intCase) {
         ArrayList<Case> lstNewCases = new ArrayList<>();
         
         ArrayList<Color> lstSearchColor = new ArrayList<>();
@@ -120,11 +120,13 @@ public class Mixing {
             return null;
         } else {
             ArrayList<Case> lstTempCases = new ArrayList<>();
+            int cont = 0;
             for (Case tempCaseNew : lstNewCases) {
-                ArrayList<Case> TestCase = TestCase(tempCaseNew, intLevel + 1);
+                ArrayList<Case> TestCase = TestCase(tempCaseNew, intLevel + 1, cont);
                 if (TestCase != null && !TestCase.isEmpty()) {
                     lstTempCases.addAll(TestCase);
                 }
+                cont++;
             }
             return lstTempCases;
         }

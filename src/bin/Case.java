@@ -6,7 +6,6 @@
 package bin;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -14,8 +13,6 @@ import java.util.Iterator;
  * @author GunBlade
  */
 public class Case {
-
-    public Float dubPeso;
 
     public ArrayList<LineColor> lstLineColors = new ArrayList<>();
     public ArrayList<Case> lstCases = new ArrayList<>();
@@ -25,7 +22,7 @@ public class Case {
     }
     
     public Case(Case datCase){
-        this.dubPeso = datCase.dubPeso;
+        
         this.lstLineColors = (ArrayList<LineColor>) datCase.lstLineColors.clone();
         this.lstCases = (ArrayList<Case>) datCase.lstCases.clone();
         
