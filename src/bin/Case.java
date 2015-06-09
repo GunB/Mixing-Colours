@@ -7,6 +7,8 @@ package bin;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,31 +18,51 @@ public class Case {
 
     public ArrayList<LineColor> lstLineColors = new ArrayList<>();
     public ArrayList<Case> lstCases = new ArrayList<>();
-    
-    public Case(){
+
+    public Case() {
+
+    }
+
+    public Case(Case datCase) {
+
+        try {
+            this.lstLineColors = LineColor.cloneList(datCase.lstLineColors);
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Case.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
+        try {
+            this.lstCases = cloneList(datCase.lstCases);
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Case.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    public Case(Case datCase){
-        
-        this.lstLineColors = (ArrayList<LineColor>) datCase.lstLineColors.clone();
-        this.lstCases = (ArrayList<Case>) datCase.lstCases.clone();
-        
-        //this = (Case) datCase.clone();
+    public static ArrayList<Case> cloneList(ArrayList<Case> list) throws CloneNotSupportedException {
+        ArrayList<Case> clone = new ArrayList<Case>(list.size());
+        for (Case item : list) {
+            clone.add(item.clone());
+        }
+        return clone;
     }
     
-    public boolean haveColors(ArrayList<Color> lstColors){
-        
-        if(lstColors.size() == lstLineColors.size()){
-            
-            for(int i =0; i<lstColors.size(); i++){
-                if(!lstLineColors.get(i).HaveColors(lstColors.get(i))){
+    @Override
+    public Case clone() throws CloneNotSupportedException{
+       return new Case(this);
+    }
+
+    public boolean haveColors(ArrayList<Color> lstColors) {
+
+        if (lstColors.size() == lstLineColors.size()) {
+
+            for (int i = 0; i < lstColors.size(); i++) {
+                if (!lstLineColors.get(i).HaveColors(lstColors.get(i))) {
                     return false;
                 }
             }
             return true;
-            
-        }else{
+
+        } else {
             return false;
         }
     }
@@ -53,6 +75,19 @@ public class Case {
             for (Color color : line.lstColor) {
                 strData += " C:" + color.strColor + " P:" + color.ftProbabilidad + " F:" + color.bulFlagCombine;
                 strData += " -";
+            }
+        }
+
+        return strData;
+    }
+    
+    public String PrintCase2() {
+        String strData = "";
+
+        for (LineColor line : lstLineColors) {
+            strData += "";
+            for (Color color : line.lstColor) {
+                strData += "" + color.strColor;
             }
         }
 
@@ -77,26 +112,26 @@ public class Case {
             }
         }
     }
-    
-    public boolean emptyLine(){
-        
+
+    public boolean emptyLine() {
+
         for (LineColor line : lstLineColors) {
-            if(line.lstColor.isEmpty()){
+            if (line.lstColor.isEmpty()) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
-    public int counThings(){
+
+    public int counThings() {
         int contColors = 0;
         for (LineColor line : lstLineColors) {
-            for(Color color : line.lstColor){
+            for (Color color : line.lstColor) {
                 contColors++;
             }
         }
-        
+
         return contColors;
     }
 }

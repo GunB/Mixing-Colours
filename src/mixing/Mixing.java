@@ -44,26 +44,54 @@ public class Mixing {
     }
 
     public void Play() {
-        ArrayList<Case> TestCase = TestCase(lstCases.get(1), 0, -1);
-
+        /*ArrayList<Case> TestCase = TestCase(lstCases.get(1), 0, -1);
+        
         for (Case tempCase : TestCase) {
-            System.out.println(tempCase.PrintCase());
+        System.out.println(tempCase.PrintCase());
+        }*/
+        
+        for(Case tempCase : lstCases){
+            ArrayList<Case> testCase = TestCase(tempCase, 0, -1);
+            
+            if(testCase == null){
+                System.out.println("GAMEOVER");
+            }else{
+                Case WinCase = WinCase(testCase);
+                System.out.println(WinCase.PrintCase2());
+            }
+            
+            
+            
+            
         }
+    }
+    
+    private Case WinCase(ArrayList<Case> lstCases){
+        Case winCase = lstCases.get(0);
+        
+        for(int i =1; i<lstCases.size(); i++){
+            if(winCase.lstLineColors.get(0).lstColor.get(0).ftProbabilidad < 
+                    lstCases.get(i).lstLineColors.get(0).lstColor.get(0).ftProbabilidad){
+                winCase = lstCases.get(i);
+            }
+        }
+        
+        return winCase;
     }
 
     private ArrayList<Case> TestCase(Case datCase, int intLevel, int intCase) {
         ArrayList<Case> lstNewCases = new ArrayList<>();
         
-        ArrayList<Color> lstSearchColor = new ArrayList<>();
+        /*ArrayList<Color> lstSearchColor = new ArrayList<>();
         lstSearchColor.add(new Color("Blue"));
         lstSearchColor.add(new Color("Yellow"));
         lstSearchColor.add(new Color("Orange"));
         
-        System.out.println(datCase.PrintCase());
+        //System.out.println(datCase.PrintCase());
         
         if(datCase.haveColors(lstSearchColor)){
             System.out.println("OK");
-        }
+        }*/
         
         Case tempTestCase = new Case(datCase);
 

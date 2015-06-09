@@ -23,5 +23,11 @@ public class Color {
     public Color(String strColor) {
         this.strColor = strColor;
     }
+    
+    public Color(Color color){
+        this.strColor = color.strColor;
+        this.ftProbabilidad = color.ftProbabilidad;
+        this.bulFlagCombine = color.bulFlagCombine;
+    }
 
 }

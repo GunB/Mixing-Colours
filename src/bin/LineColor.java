@@ -19,6 +19,23 @@ public class LineColor {
         this.lstColor = lstColor;
     }
     
+    public static ArrayList<LineColor> cloneList(ArrayList<LineColor> list) throws CloneNotSupportedException {
+        ArrayList<LineColor> clone = new ArrayList<LineColor>(list.size());
+        for (LineColor item : list) {
+            clone.add(item.clone());
+        }
+        return clone;
+    }
+    
+    @Override
+    public LineColor clone() throws CloneNotSupportedException{
+       return new LineColor(this);
+    }
+    
+    public LineColor(LineColor lnColor){
+        this.lstColor = (ArrayList<Color>) lnColor.lstColor.clone();
+    }
+    
     public LineColor(Color[] colors){
         this.lstColor = new ArrayList<>(Arrays.asList(colors));
     }
