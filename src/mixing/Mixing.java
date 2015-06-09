@@ -44,20 +44,34 @@ public class Mixing {
     }
 
     public void Play() {
-        ArrayList<Case> TestCase = TestCase(lstCases.get(1));
+        ArrayList<Case> TestCase = TestCase(lstCases.get(1), 0);
 
         for (Case tempCase : TestCase) {
             System.out.println(tempCase.PrintCase());
         }
     }
 
-    private ArrayList<Case> TestCase(Case datCase) {
+    private ArrayList<Case> TestCase(Case datCase, int intLevel) {
         ArrayList<Case> lstNewCases = new ArrayList<>();
+        
+        ArrayList<Color> lstSearchColor = new ArrayList<>();
+        lstSearchColor.add(new Color("Blue"));
+        lstSearchColor.add(new Color("Yellow"));
+        lstSearchColor.add(new Color("Orange"));
+        
+        System.out.println(datCase.PrintCase());
+        
+        if(datCase.haveColors(lstSearchColor)){
+            System.out.println("OK");
+        }
+        
+        Case tempTestCase = new Case(datCase);
 
         datCase = CleanCase(datCase);
         int counThings = datCase.counThings();
         
         boolean emptyLine = datCase.emptyLine();
+        
         
         if(emptyLine){
             return null;
@@ -72,9 +86,9 @@ public class Mixing {
         }
 
         //<editor-fold defaultstate="collapsed" desc="Creating cases lstNewCases.add(tempCase)">
-        for (int i = 0; i < datCase.lstColors.size() - 1; i++) {
-            LineColor lnColors1 = datCase.lstColors.get(i);
-            LineColor lnColors2 = datCase.lstColors.get(i + 1);
+        for (int i = 0; i < datCase.lstLineColors.size() - 1; i++) {
+            LineColor lnColors1 = datCase.lstLineColors.get(i);
+            LineColor lnColors2 = datCase.lstLineColors.get(i + 1);
 
             for (Color color1 : lnColors1.lstColor) {
                 for (Color color2 : lnColors2.lstColor) {
@@ -87,9 +101,9 @@ public class Mixing {
                         Case tempCase = new Case(datCase);//datCase;
                         //SerializationUtils.clone(datCase);
 
-                        tempCase.lstColors.remove(i);
-                        tempCase.lstColors.remove(i);
-                        tempCase.lstColors.add(i, new LineColor(newColor));
+                        tempCase.lstLineColors.remove(i);
+                        tempCase.lstLineColors.remove(i);
+                        tempCase.lstLineColors.add(i, new LineColor(newColor));
 
                         lstNewCases.add(tempCase);
 
@@ -106,8 +120,8 @@ public class Mixing {
             return null;
         } else {
             ArrayList<Case> lstTempCases = new ArrayList<>();
-            for (Case tempCase : lstNewCases) {
-                ArrayList<Case> TestCase = TestCase(tempCase);
+            for (Case tempCaseNew : lstNewCases) {
+                ArrayList<Case> TestCase = TestCase(tempCaseNew, intLevel + 1);
                 if (TestCase != null && !TestCase.isEmpty()) {
                     lstTempCases.addAll(TestCase);
                 }
@@ -125,9 +139,9 @@ public class Mixing {
             return null;
         }
 
-        for (int i = 0; i < datCase.lstColors.size() - 1; i++) {
-            LineColor lnColors1 = datCase.lstColors.get(i);
-            LineColor lnColors2 = datCase.lstColors.get(i + 1);
+        for (int i = 0; i < datCase.lstLineColors.size() - 1; i++) {
+            LineColor lnColors1 = datCase.lstLineColors.get(i);
+            LineColor lnColors2 = datCase.lstLineColors.get(i + 1);
 
             for (Color color1 : lnColors1.lstColor) {
                 for (Color color2 : lnColors2.lstColor) {
@@ -186,16 +200,16 @@ public class Mixing {
 
             if (contRulesCase > 0) {
                 String[] split = line.split("\\s+");
-                ArrayList<Color> lstColors = new ArrayList<>();
+                ArrayList<Color> lstLineColors = new ArrayList<>();
                 for (int i = 0; i < split.length; i = i + 2) {
                     Color color = new Color(split[i], Float.parseFloat(split[i + 1]));
-                    lstColors.add(color);
+                    lstLineColors.add(color);
                     if (split[i + 2].contains("END")) {
                         break;
                     }
                 }
-                LineColor lnColor = new LineColor(lstColors);
-                tempCase.lstColors.add(lnColor);
+                LineColor lnColor = new LineColor(lstLineColors);
+                tempCase.lstLineColors.add(lnColor);
 
                 contRulesCase--;
                 if (contRulesCase == 0) {

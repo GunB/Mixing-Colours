@@ -6,6 +6,7 @@
 package bin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -16,7 +17,7 @@ public class Case {
 
     public Float dubPeso;
 
-    public ArrayList<LineColor> lstColors = new ArrayList<>();
+    public ArrayList<LineColor> lstLineColors = new ArrayList<>();
     public ArrayList<Case> lstCases = new ArrayList<>();
     
     public Case(){
@@ -25,16 +26,32 @@ public class Case {
     
     public Case(Case datCase){
         this.dubPeso = datCase.dubPeso;
-        this.lstColors = (ArrayList<LineColor>) datCase.lstColors.clone();
+        this.lstLineColors = (ArrayList<LineColor>) datCase.lstLineColors.clone();
         this.lstCases = (ArrayList<Case>) datCase.lstCases.clone();
         
         //this = (Case) datCase.clone();
+    }
+    
+    public boolean haveColors(ArrayList<Color> lstColors){
+        
+        if(lstColors.size() == lstLineColors.size()){
+            
+            for(int i =0; i<lstColors.size(); i++){
+                if(!lstLineColors.get(i).HaveColors(lstColors.get(i))){
+                    return false;
+                }
+            }
+            return true;
+            
+        }else{
+            return false;
+        }
     }
 
     public String PrintCase() {
         String strData = "";
 
-        for (LineColor line : lstColors) {
+        for (LineColor line : lstLineColors) {
             strData += "\n";
             for (Color color : line.lstColor) {
                 strData += " C:" + color.strColor + " P:" + color.ftProbabilidad + " F:" + color.bulFlagCombine;
@@ -46,10 +63,10 @@ public class Case {
     }
 
     public void CleanCase() {
-        for (LineColor line : lstColors) {
+        for (LineColor line : lstLineColors) {
 
-            ArrayList<Color> lstColors = line.lstColor;
-            Iterator<Color> i = lstColors.iterator();
+            ArrayList<Color> lstLineColors = line.lstColor;
+            Iterator<Color> i = lstLineColors.iterator();
 
             while (i.hasNext()) {
                 Color color = i.next(); // must be called before you can call i.remove()
@@ -66,7 +83,7 @@ public class Case {
     
     public boolean emptyLine(){
         
-        for (LineColor line : lstColors) {
+        for (LineColor line : lstLineColors) {
             if(line.lstColor.isEmpty()){
                 return true;
             }
@@ -77,7 +94,7 @@ public class Case {
     
     public int counThings(){
         int contColors = 0;
-        for (LineColor line : lstColors) {
+        for (LineColor line : lstLineColors) {
             for(Color color : line.lstColor){
                 contColors++;
             }

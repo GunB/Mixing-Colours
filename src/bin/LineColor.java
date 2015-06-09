@@ -23,6 +23,15 @@ public class LineColor {
         this.lstColor = new ArrayList<>(Arrays.asList(colors));
     }
     
+    public boolean HaveColors(Color color){
+        for(Color color2 : lstColor){
+            if(color.strColor.equals(color2.strColor)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public LineColor(Color color){
         Color[] colors = new Color[1];
         colors[0] = color;
