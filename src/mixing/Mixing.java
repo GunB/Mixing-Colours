@@ -35,13 +35,8 @@ public class Mixing {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        try {
-            Mixing mix = new Mixing().Run();
-            mix.Play();
-
-        } catch (IOException ex) {
-            Logger.getLogger(Mixing.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Mixing mix = new Mixing().Runnable();
+        mix.Play();
     }
 
     public void Play() {
@@ -185,8 +180,8 @@ public class Mixing {
     }
 
     /*
-    Leyendo los datos desde Consola
-    */
+     Leyendo los datos desde Consola
+     */
     private Mixing Runnable() {
         Scanner scanIn = new Scanner(System.in);
         contRules = Integer.parseInt(scanIn.nextLine());
@@ -197,16 +192,16 @@ public class Mixing {
             lstRules.add(new Rule(new Color(split[0]), new Color(split[1]), new Color(split[2])));
             contRules--;
         }
-        
+
         contCases = Integer.parseInt(scanIn.nextLine());
-        
-        while(contCases > 0){
+
+        while (contCases > 0) {
             contRulesCase = Integer.parseInt(scanIn.nextLine());
             Case tempCase = new Case();
-            
-            while(contRulesCase > 0){
+
+            while (contRulesCase > 0) {
                 String line = scanIn.nextLine();
-                
+
                 String[] split = line.split("\\s+");
                 ArrayList<Color> lstLineColors = new ArrayList<>();
                 for (int i = 0; i < split.length; i = i + 2) {
@@ -218,20 +213,20 @@ public class Mixing {
                 }
                 LineColor lnColor = new LineColor(lstLineColors);
                 tempCase.lstLineColors.add(lnColor);
-                
+
                 contRulesCase--;
             }
             lstCases.add(tempCase);
             contCases--;
         }
-        
+
         scanIn.close();
         return this;
     }
 
     /*
-    Leyendo los datos desde el archivo de texto "1.in"
-    */
+     Leyendo los datos desde el archivo de texto "1.in"
+     */
     private Mixing Run() throws IOException {
         File file = FileUtils.Read(FileUtils.strRoot + File.separator + "1.in");
         Case tempCase = null;
