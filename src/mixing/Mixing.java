@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utils.FileUtils;
@@ -46,62 +47,47 @@ public class Mixing {
     public void Play() {
         /*ArrayList<Case> TestCase = TestCase(lstCases.get(1), 0, -1);
         
-        for (Case tempCase : TestCase) {
-        System.out.println(tempCase.PrintCase());
-        }*/
-        
-        for(Case tempCase : lstCases){
+         for (Case tempCase : TestCase) {
+         System.out.println(tempCase.PrintCase());
+         }*/
+
+        for (Case tempCase : lstCases) {
             ArrayList<Case> testCase = TestCase(tempCase, 0, -1);
-            
-            if(testCase == null){
+
+            if (testCase == null) {
                 System.out.println("GAMEOVER");
-            }else{
+            } else {
                 Case WinCase = WinCase(testCase);
                 System.out.println(WinCase.PrintCase2());
             }
-            
-            
-            
-            
+
         }
     }
-    
-    private Case WinCase(ArrayList<Case> lstCases){
+
+    private Case WinCase(ArrayList<Case> lstCases) {
         Case winCase = lstCases.get(0);
-        
-        for(int i =1; i<lstCases.size(); i++){
-            if(winCase.lstLineColors.get(0).lstColor.get(0).ftProbabilidad < 
-                    lstCases.get(i).lstLineColors.get(0).lstColor.get(0).ftProbabilidad){
+
+        for (int i = 1; i < lstCases.size(); i++) {
+            if (winCase.lstLineColors.get(0).lstColor.get(0).ftProbabilidad
+                    < lstCases.get(i).lstLineColors.get(0).lstColor.get(0).ftProbabilidad) {
                 winCase = lstCases.get(i);
             }
         }
-        
+
         return winCase;
     }
 
     private ArrayList<Case> TestCase(Case datCase, int intLevel, int intCase) {
         ArrayList<Case> lstNewCases = new ArrayList<>();
-        
-        /*ArrayList<Color> lstSearchColor = new ArrayList<>();
-        lstSearchColor.add(new Color("Blue"));
-        lstSearchColor.add(new Color("Yellow"));
-        lstSearchColor.add(new Color("Orange"));
-        
-        //System.out.println(datCase.PrintCase());
-        
-        if(datCase.haveColors(lstSearchColor)){
-            System.out.println("OK");
-        }*/
-        
+
         Case tempTestCase = new Case(datCase);
 
         datCase = CleanCase(datCase);
         int counThings = datCase.counThings();
-        
+
         boolean emptyLine = datCase.emptyLine();
-        
-        
-        if(emptyLine){
+
+        if (emptyLine) {
             return null;
         }
 
@@ -198,6 +184,54 @@ public class Mixing {
         return null;
     }
 
+    /*
+    Leyendo los datos desde Consola
+    */
+    private Mixing Runnable() {
+        Scanner scanIn = new Scanner(System.in);
+        contRules = Integer.parseInt(scanIn.nextLine());
+
+        while (contRules > 0) {
+            String line = scanIn.nextLine();
+            String[] split = line.split("\\s+");
+            lstRules.add(new Rule(new Color(split[0]), new Color(split[1]), new Color(split[2])));
+            contRules--;
+        }
+        
+        contCases = Integer.parseInt(scanIn.nextLine());
+        
+        while(contCases > 0){
+            contRulesCase = Integer.parseInt(scanIn.nextLine());
+            Case tempCase = new Case();
+            
+            while(contRulesCase > 0){
+                String line = scanIn.nextLine();
+                
+                String[] split = line.split("\\s+");
+                ArrayList<Color> lstLineColors = new ArrayList<>();
+                for (int i = 0; i < split.length; i = i + 2) {
+                    Color color = new Color(split[i], Float.parseFloat(split[i + 1]));
+                    lstLineColors.add(color);
+                    if (split[i + 2].contains("END")) {
+                        break;
+                    }
+                }
+                LineColor lnColor = new LineColor(lstLineColors);
+                tempCase.lstLineColors.add(lnColor);
+                
+                contRulesCase--;
+            }
+            lstCases.add(tempCase);
+            contCases--;
+        }
+        
+        scanIn.close();
+        return this;
+    }
+
+    /*
+    Leyendo los datos desde el archivo de texto "1.in"
+    */
     private Mixing Run() throws IOException {
         File file = FileUtils.Read(FileUtils.strRoot + File.separator + "1.in");
         Case tempCase = null;
